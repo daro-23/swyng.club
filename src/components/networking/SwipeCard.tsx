@@ -88,44 +88,48 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
           <span className="text-emerald-500 font-black text-4xl uppercase tracking-widest shadow-sm">Sinergia</span>
         </motion.div>
 
-        {/* Profile Image / Header Area */}
-        <div className="flex-1 bg-gradient-to-b from-slate-800 to-slate-900 relative">
-        {profile.imageUrl ? (
-          <img 
-            src={profile.imageUrl} 
-            alt={profile.name} 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-slate-800/50 flex flex-col items-center justify-center">
-             <div className="w-32 h-32 rounded-full bg-slate-700 border-4 border-[#040814] flex items-center justify-center mb-4">
-               <span className="text-4xl text-slate-400 font-bold">{profile.name.charAt(0)}</span>
-             </div>
-          </div>
-        )}
-        
-        {/* Gradient Overlay for Text Visibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent pointer-events-none" />
-           
-           {/* Gradient Overlay for Text */}
-           <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-slate-900 to-transparent"></div>
+        {/* Full Card Image Background */}
+        <div className="absolute inset-0 z-0">
+          {profile.imageUrl ? (
+            <img 
+              src={profile.imageUrl} 
+              alt={profile.name} 
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-slate-800 flex flex-col items-center justify-center">
+               <div className="w-32 h-32 rounded-full bg-slate-700 border-4 border-[#040814] flex items-center justify-center mb-4">
+                 <span className="text-4xl text-slate-400 font-bold">{profile.name.charAt(0)}</span>
+               </div>
+            </div>
+          )}
+          
+          {/* Gradient Overlay for Text Visibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-transparent/20 pointer-events-none" />
         </div>
 
+        {/* Top left corner: Company Logo */}
+        <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-slate-900/60 backdrop-blur-md pr-3 pl-1 py-1 rounded-full border border-slate-700/50">
+          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden">
+             {/* Mock company logo based on company name first letter or random */}
+             <img src={`https://ui-avatars.com/api/?name=${profile.company}&background=random&color=fff&bold=true`} alt={profile.company} className="w-full h-full object-cover" />
+          </div>
+          <span className="text-xs font-semibold text-white/90">{profile.company}</span>
+        </div>
+
+        {/* Spacer to push content to bottom */}
+        <div className="flex-1 z-10 pointer-events-none" />
+
         {/* Profile Info */}
-        <div className="p-6 pb-24 bg-slate-900 z-10 flex flex-col justify-end">
+        <div className="p-6 pb-24 z-10 flex flex-col justify-end pointer-events-none">
           <h2 className="text-2xl font-bold text-white flex items-center gap-2">
             {profile.name}
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Swynger</Badge>
           </h2>
           
           <div className="flex items-center text-slate-300 mt-2 text-sm font-medium">
-            <Briefcase className="w-4 h-4 mr-2" />
-            {profile.role}
-          </div>
-          
-          <div className="flex items-center text-slate-400 mt-1 text-sm">
-            <Building className="w-4 h-4 mr-2" />
-            {profile.company}
+            <Briefcase className="w-4 h-4 mr-2 text-slate-400" />
+            {profile.role} en {profile.company}
           </div>
 
           <p className="text-slate-400 text-sm mt-4 line-clamp-3">
