@@ -58,10 +58,8 @@ export function TopHeader() {
           
           {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger {...({ asChild: true } as any)}>
-                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none">
-                  <User className="h-4 w-4 text-slate-300" />
-                </button>
+              <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none">
+                <User className="h-4 w-4 text-slate-300" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-300">
                 <DropdownMenuLabel className="font-normal">
@@ -71,21 +69,20 @@ export function TopHeader() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-slate-800" />
-                <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
-                  <Link href="/profile" className="flex w-full items-center">
+                <DropdownMenuItem className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer p-0">
+                  <Link href="/profile" className="flex w-full items-center px-2 py-1.5">
                     <User className="mr-2 h-4 w-4" />
                     <span>Mi Perfil</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
-                  <Link href="/pricing" className="flex w-full items-center">
+                <DropdownMenuItem className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer p-0">
+                  <Link href="/pricing" className="flex w-full items-center px-2 py-1.5">
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Suscripción</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-slate-800" />
                 <DropdownMenuItem 
-                  {...({ asChild: true } as any)}
                   onClick={handleLogout} 
                   className="text-red-400 hover:bg-slate-800 focus:bg-slate-800 hover:text-red-300 cursor-pointer"
                 >
