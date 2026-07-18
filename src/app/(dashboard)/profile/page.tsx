@@ -1,13 +1,24 @@
 "use client";
 
-import { User, Briefcase, Target, Activity, Save, Ghost } from "lucide-react";
+import { User, Briefcase, Target, Activity, Save, Ghost, Image as ImageIcon, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+
+const NETWORKING_TAGS = [
+  "Inversión (Venture Capital)",
+  "Usuarios Beta / Early Adopters",
+  "Feedback de Producto",
+  "Ventas B2B",
+  "Contratar Talento",
+  "Networking General",
+  "Socios / Co-founders"
+];
 
 export default function ProfilePage() {
   const handleSave = (e: React.FormEvent) => {
@@ -74,10 +85,22 @@ export default function ProfilePage() {
         <Card className="bg-slate-900 border-slate-800">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-primary" /> Empresa
+              <Briefcase className="h-5 w-5 text-primary" /> Empresa & Catálogo
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="flex items-center gap-6 mb-6">
+              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-slate-800 border-2 border-slate-700 overflow-hidden">
+                <ImageIcon className="h-8 w-8 text-slate-400" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-white">Logo de la Empresa</Label>
+                <Button variant="outline" className="border-slate-700 text-white bg-slate-800 hover:bg-slate-700 block" type="button">
+                  Subir Logo
+                </Button>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="company" className="text-slate-300">Nombre de la Empresa</Label>
@@ -88,26 +111,55 @@ export default function ProfilePage() {
                 <Input id="website" defaultValue="https://swyng.club" className="bg-slate-950 border-slate-800 text-white" />
               </div>
             </div>
+            
+            <div className="space-y-2 pt-2">
+              <Label htmlFor="description" className="text-slate-300">Pitch de la Empresa (Lo que hacen en 1 oración)</Label>
+              <Input id="description" placeholder="Ej. Revolucionando el mundo B2B con IA" className="bg-slate-950 border-slate-800 text-white" />
+            </div>
+
+            {/* Catalog Section */}
+            <div className="pt-6 mt-6 border-t border-slate-800">
+              <div className="flex items-center justify-between mb-4">
+                <Label className="text-white text-base">Catálogo de Productos / Servicios</Label>
+                <Button variant="outline" size="sm" className="h-8 border-primary/50 text-primary hover:bg-primary/10">
+                  <Plus className="h-4 w-4 mr-1" /> Añadir
+                </Button>
+              </div>
+              <div className="bg-slate-950 border border-slate-800 rounded-lg p-6 text-center text-slate-400">
+                Aún no has agregado productos a tu catálogo. <br/>
+                <span className="text-xs mt-2 block text-slate-500">Sube tus servicios para recibir preguntas y likes de la comunidad.</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
         <Card className="bg-slate-900 border-slate-800">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Target className="h-5 w-5 text-primary" /> Networking
+              <Target className="h-5 w-5 text-primary" /> Networking & Matchmaking
             </CardTitle>
             <CardDescription className="text-slate-400">
-              ¿Qué valor aportas y qué estás buscando en la comunidad? (Separado por comas)
+              Dile a nuestra IA exactamente qué buscas para conectarte con las personas correctas.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="offers" className="text-slate-300">Servicios / Valor que ofrezco</Label>
               <Input id="offers" defaultValue="Desarrollo Full-Stack, Producto, UX/UI" className="bg-slate-950 border-slate-800 text-white" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="lookingFor" className="text-slate-300">Estoy buscando</Label>
-              <Input id="lookingFor" defaultValue="Usuarios Beta, Feedback, Inversión" className="bg-slate-950 border-slate-800 text-white" />
+            
+            <div className="space-y-3 pt-2">
+              <Label className="text-white">Lo que busco (Selecciona todas las que apliquen):</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {NETWORKING_TAGS.map(tag => (
+                  <div key={tag} className="flex items-start space-x-3 bg-slate-950/50 p-3 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors">
+                    <Checkbox id={tag} className="border-slate-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary mt-0.5" />
+                    <Label htmlFor={tag} className="text-slate-300 font-normal cursor-pointer leading-tight">
+                      {tag}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
