@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const NETWORKING_TAGS = [
   "Inversión (Venture Capital)",
@@ -21,9 +22,25 @@ const NETWORKING_TAGS = [
 ];
 
 export default function ProfilePage() {
+  const [catalogItems, setCatalogItems] = useState([
+    { id: 1, title: "Consultoría de Producto", description: "Auditoría completa de UX/UI y roadmap de producto." }
+  ]);
+  const [isAddingItem, setIsAddingItem] = useState(false);
+  const [newItemTitle, setNewItemTitle] = useState("");
+  const [newItemDesc, setNewItemDesc] = useState("");
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Perfil actualizado correctamente");
+  };
+
+  const handleAddItem = () => {
+    if (!newItemTitle.trim()) return;
+    setCatalogItems([...catalogItems, { id: Date.now(), title: newItemTitle, description: newItemDesc }]);
+    setNewItemTitle("");
+    setNewItemDesc("");
+    setIsAddingItem(false);
+    toast.success("Servicio añadido al catálogo");
   };
 
   return (
@@ -121,14 +138,58 @@ export default function ProfilePage() {
             <div className="pt-6 mt-6 border-t border-slate-800">
               <div className="flex items-center justify-between mb-4">
                 <Label className="text-white text-base">Catálogo de Productos / Servicios</Label>
-                <Button variant="outline" size="sm" className="h-8 border-primary/50 text-primary hover:bg-primary/10">
-                  <Plus className="h-4 w-4 mr-1" /> Añadir
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-8 border-primary/50 text-primary hover:bg-primary/10"
+                  type="button"
+                  onClick={() => setIsAddingItem(!isAddingItem)}
+                >
+                  <Plus className="h-4 w-4 mr-1" /> {isAddingItem ? "Cancelar" : "Añadir"}
                 </Button>
               </div>
-              <div className="bg-slate-950 border border-slate-800 rounded-lg p-6 text-center text-slate-400">
-                Aún no has agregado productos a tu catálogo. <br/>
-                <span className="text-xs mt-2 block text-slate-500">Sube tus servicios para recibir preguntas y likes de la comunidad.</span>
-              </div>
+
+              {isAddingItem && (
+                <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 mb-4 space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Nombre del Servicio/Producto</Label>
+                    <Input 
+                      placeholder="Ej. Consultoría 1-1" 
+                      className="bg-slate-950 border-slate-800 text-white" 
+                      value={newItemTitle}
+                      onChange={(e) => setNewItemTitle(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-slate-300">Descripción breve</Label>
+                    <Input 
+                      placeholder="¿Qué incluye y qué problema resuelve?" 
+                      className="bg-slate-950 border-slate-800 text-white" 
+                      value={newItemDesc}
+                      onChange={(e) => setNewItemDesc(e.target.value)}
+                    />
+                  </div>
+                  <Button type="button" onClick={handleAddItem} className="w-full bg-primary hover:bg-primary/90 text-white">
+                    Guardar Servicio
+                  </Button>
+                </div>
+              )}
+
+              {catalogItems.length === 0 ? (
+                <div className="bg-slate-950 border border-slate-800 rounded-lg p-6 text-center text-slate-400">
+                  Aún no has agregado productos a tu catálogo. <br/>
+                  <span className="text-xs mt-2 block text-slate-500">Sube tus servicios para recibir preguntas y likes de la comunidad.</span>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {catalogItems.map(item => (
+                    <div key={item.id} className="bg-slate-950 border border-slate-800 rounded-lg p-4 relative group">
+                      <h4 className="text-white font-medium">{item.title}</h4>
+                      <p className="text-slate-400 text-sm mt-1">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

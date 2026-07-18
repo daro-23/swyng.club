@@ -20,6 +20,7 @@ const MOCK_PROFILES: SwipeProfile[] = [
     company: "PropTech Latam",
     bio: "Construyendo el futuro de Real Estate en México. Buscando levantar Serie A y conocer C-levels técnicos.",
     interests: ["Real Estate", "Venture Capital", "Pádel"],
+    imageUrl: "https://i.pravatar.cc/150?u=p1",
   },
   {
     id: "p2",
@@ -28,6 +29,7 @@ const MOCK_PROFILES: SwipeProfile[] = [
     company: "Seed Ventures",
     bio: "Inversora temprana en SaaS y Fintech. Me encanta rebotar ideas en el hoyo 19.",
     interests: ["B2B SaaS", "Fintech", "Golf"],
+    imageUrl: "https://i.pravatar.cc/150?u=p2",
   },
   {
     id: "p3",
@@ -36,6 +38,7 @@ const MOCK_PROFILES: SwipeProfile[] = [
     company: "Fintech Startup",
     bio: "Arquitecto de software escalable. Apasionado por crypto y nuevos modelos de pago.",
     interests: ["Blockchain", "Engineering", "Barre"],
+    imageUrl: "https://i.pravatar.cc/150?u=p3",
   },
 ];
 

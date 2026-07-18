@@ -13,11 +13,11 @@ interface Match {
 }
 
 const MOCK_MATCHES: Match[] = [
-  { id: "1", name: "David F.", role: "Founder", isNew: true },
-  { id: "2", name: "Ana V.", role: "Partner VC" },
-  { id: "3", name: "Carlos R.", role: "CTO" },
-  { id: "4", name: "Sofia T.", role: "Growth" },
-  { id: "5", name: "Miguel A.", role: "CEO" },
+  { id: "1", name: "David F.", role: "Founder", isNew: true, imageUrl: "https://i.pravatar.cc/150?u=m1" },
+  { id: "2", name: "Ana V.", role: "Partner VC", imageUrl: "https://i.pravatar.cc/150?u=m2" },
+  { id: "3", name: "Carlos R.", role: "CTO", imageUrl: "https://i.pravatar.cc/150?u=m3" },
+  { id: "4", name: "Sofia T.", role: "Growth", imageUrl: "https://i.pravatar.cc/150?u=m4" },
+  { id: "5", name: "Miguel A.", role: "CEO", imageUrl: "https://i.pravatar.cc/150?u=m5" },
 ];
 
 export function MatchesBar() {
@@ -33,10 +33,14 @@ export function MatchesBar() {
               transition={{ delay: i * 0.1 }}
               className="flex flex-col items-center gap-2"
             >
-              <div className={`relative h-16 w-16 rounded-full bg-slate-800 border-2 flex items-center justify-center
+              <div className={`relative h-16 w-16 rounded-full bg-slate-800 border-2 flex items-center justify-center overflow-hidden
                 ${match.isNew ? "border-primary shadow-[0_0_15px_rgba(255,106,0,0.5)]" : "border-slate-700"}
               `}>
-                <User className="h-7 w-7 text-slate-400" />
+                {match.imageUrl ? (
+                  <img src={match.imageUrl} alt={match.name} className="w-full h-full object-cover" />
+                ) : (
+                  <User className="h-7 w-7 text-slate-400" />
+                )}
                 {match.isNew && (
                   <div className="absolute top-0 right-0 h-4 w-4 bg-primary rounded-full border-2 border-[#040814]"></div>
                 )}

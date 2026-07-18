@@ -14,6 +14,7 @@ export interface SwipeProfile {
   company: string;
   bio: string;
   interests: string[];
+  imageUrl?: string;
 }
 
 interface SwipeCardProps {
@@ -89,11 +90,22 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
 
         {/* Profile Image / Header Area */}
         <div className="flex-1 bg-gradient-to-b from-slate-800 to-slate-900 relative">
-           <div className="absolute inset-0 bg-slate-800/50 flex flex-col items-center justify-center">
+        {profile.imageUrl ? (
+          <img 
+            src={profile.imageUrl} 
+            alt={profile.name} 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-slate-800/50 flex flex-col items-center justify-center">
              <div className="w-32 h-32 rounded-full bg-slate-700 border-4 border-[#040814] flex items-center justify-center mb-4">
                <span className="text-4xl text-slate-400 font-bold">{profile.name.charAt(0)}</span>
              </div>
-           </div>
+          </div>
+        )}
+        
+        {/* Gradient Overlay for Text Visibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent pointer-events-none" />
            
            {/* Gradient Overlay for Text */}
            <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-slate-900 to-transparent"></div>
