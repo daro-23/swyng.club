@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { User, Briefcase, Target, Activity, Heart, MessageCircle, ArrowLeft, Send, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -59,7 +60,7 @@ export default function MemberProfilePage() {
         {/* Basic Info */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative pt-16 shadow-xl">
           <div className="absolute -top-16 left-6 h-28 w-28 rounded-2xl bg-slate-800 border-4 border-slate-900 shadow-xl overflow-hidden flex items-center justify-center">
-             <User className="h-12 w-12 text-slate-400" />
+             <img src="https://i.pravatar.cc/150?u=p1" alt="Profile" className="w-full h-full object-cover" />
           </div>
           
           <div className="flex justify-between items-start">
@@ -104,6 +105,37 @@ export default function MemberProfilePage() {
             <Badge variant="outline" className="border-primary/50 text-slate-200 bg-primary/10">Inversión (Venture Capital)</Badge>
             <Badge variant="outline" className="border-slate-700 text-slate-300">Socios / Co-founders</Badge>
             <Badge variant="outline" className="border-slate-700 text-slate-300">Feedback de Producto</Badge>
+          </div>
+        </div>
+
+        {/* Startup Achievements & Presentation */}
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4 px-2">Logros & Presentación</h2>
+          <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
+            <Card className="min-w-[280px] bg-slate-900 border-slate-800 overflow-hidden shrink-0">
+              <div className="h-40 w-full relative">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&q=80" alt="Pitch deck" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <span className="text-white font-bold bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm text-sm border border-white/20">Pitch Deck 2024</span>
+                </div>
+              </div>
+            </Card>
+            <Card className="min-w-[280px] bg-slate-900 border-slate-800 overflow-hidden shrink-0">
+              <div className="h-40 w-full relative">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?w=400&q=80" alt="Team meeting" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <span className="text-white font-bold bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm text-sm border border-white/20">Lanzamiento V2</span>
+                </div>
+              </div>
+            </Card>
+            <Card className="min-w-[280px] bg-slate-900 border-slate-800 overflow-hidden shrink-0 flex items-center justify-center cursor-pointer hover:border-primary/50 transition-colors">
+               <div className="text-center p-6">
+                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                   <Activity className="h-6 w-6 text-primary" />
+                 </div>
+                 <p className="text-slate-300 font-medium text-sm">Ver todas las fotos</p>
+               </div>
+            </Card>
           </div>
         </div>
 
