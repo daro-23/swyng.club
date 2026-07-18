@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { Bell, User, Settings, LogOut } from "lucide-react";
+import { Bell, User, Settings, LogOut, ChevronLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +16,7 @@ import {
 
 export function TopHeader() {
   const router = useRouter();
+  const pathname = usePathname();
   const supabase = createClient();
   const [user, setUser] = useState<any>(null);
 
@@ -32,11 +33,20 @@ export function TopHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-800 bg-[#040814]/80 backdrop-blur-xl">
       <div className="container flex h-14 items-center justify-between px-4">
-        <Link href="/clubhouse" className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-tighter text-white">
-            swyng<span className="text-primary">.</span>
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => router.back()} 
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            aria-label="Regresar"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <Link href="/home" className="flex items-center gap-2">
+            <span className="text-xl font-bold tracking-tighter text-white">
+              SWYNG<span className="text-primary">.</span>
+            </span>
+          </Link>
+        </div>
         <div className="flex items-center gap-4">
           <button className="relative p-2 text-slate-400 hover:text-white transition-colors">
             <Bell className="h-5 w-5" />
