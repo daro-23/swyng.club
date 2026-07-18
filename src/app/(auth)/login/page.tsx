@@ -11,6 +11,7 @@ import { LogIn, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export default function LoginPage() {
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,35 +23,24 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Intentar iniciar sesión primero
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (signInError) {
-      // Si falla, intentamos registrar al usuario de forma invisible
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (signUpError) {
-        // Si el registro también falla (ej. contraseña muy corta), mostramos error
-        toast.error(signInError.message === "Invalid login credentials" ? "Credenciales inválidas." : signInError.message);
+    if (isLogin) {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        toast.error(error.message === "Invalid login credentials" ? "Credenciales inválidas." : error.message);
         setLoading(false);
         return;
       }
-      
-      // Si el registro fue exitoso
+      toast.success("¡Bienvenido de vuelta!");
+    } else {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        toast.error(error.message);
+        setLoading(false);
+        return;
+      }
       toast.success("¡Cuenta creada exitosamente! Bienvenido al Club.");
-      router.push("/home");
-      router.refresh();
-      return;
     }
 
-    // Si el inicio de sesión fue exitoso
-    toast.success("¡Bienvenido de vuelta!");
     router.push("/home");
     router.refresh();
   };
@@ -64,7 +54,9 @@ export default function LoginPage() {
           <h1 className="text-4xl font-bold tracking-tighter text-white">
             swyng<span className="text-primary">.</span>
           </h1>
-          <p className="text-slate-400">Accede a tu cuenta o crea una nueva al instante.</p>
+          <p className="text-slate-400">
+            {isLogin ? "Inicia sesión en el club." : "Crea tu cuenta al instante."}
+          </p>
         </div>
 
         <form className="space-y-6" onSubmit={handleAuth}>
@@ -113,10 +105,20 @@ export default function LoginPage() {
               className="w-full bg-primary text-white hover:bg-primary/90 h-12 text-md font-semibold"
             >
               {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <LogIn className="mr-2 h-5 w-5" />}
-              Entrar al Club
+              {isLogin ? "Entrar al Club" : "Crear Cuenta"}
             </Button>
           </div>
         </form>
+
+        <div className="mt-6 text-center text-sm text-slate-400">
+          {isLogin ? "¿No tienes cuenta? " : "¿Ya tienes cuenta? "}
+          <button 
+            onClick={() => setIsLogin(!isLogin)} 
+            className="text-primary font-semibold hover:underline"
+          >
+            {isLogin ? "Regístrate aquí" : "Inicia Sesión"}
+          </button>
+        </div>
 
         <p className="text-center text-xs text-slate-500 mt-6">
           Al continuar, aceptas nuestros <Link href="#" className="text-primary hover:underline">Términos de Servicio</Link> y <Link href="#" className="text-primary hover:underline">Política de Privacidad</Link>.

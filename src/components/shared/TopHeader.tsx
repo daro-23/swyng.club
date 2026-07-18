@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
@@ -16,6 +17,11 @@ import {
 export function TopHeader() {
   const router = useRouter();
   const supabase = createClient();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+  }, [supabase.auth]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -40,45 +46,51 @@ export function TopHeader() {
             </span>
           </button>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger {...({ asChild: true } as any)}>
-              <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none">
-                <User className="h-4 w-4 text-slate-300" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-300">
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none text-white">Darío (Tú)</p>
-                  <p className="text-xs leading-none text-slate-400">dario@swyng.club</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-800" />
-              <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
-                <Link href="/profile" className="flex w-full items-center">
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Mi Perfil</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
-                <Link href="/pricing" className="flex w-full items-center">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Suscripción</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-slate-800" />
-              <DropdownMenuItem 
-                {...({ asChild: true } as any)}
-                onClick={handleLogout} 
-                className="text-red-400 hover:bg-slate-800 focus:bg-slate-800 hover:text-red-300 cursor-pointer"
-              >
-                <div className="flex w-full items-center">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Cerrar Sesión</span>
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger {...({ asChild: true } as any)}>
+                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none">
+                  <User className="h-4 w-4 text-slate-300" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-300">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none text-white">Darío (Tú)</p>
+                    <p className="text-xs leading-none text-slate-400">{user.email}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-slate-800" />
+                <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
+                  <Link href="/profile" className="flex w-full items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Mi Perfil</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
+                  <Link href="/pricing" className="flex w-full items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Suscripción</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-slate-800" />
+                <DropdownMenuItem 
+                  {...({ asChild: true } as any)}
+                  onClick={handleLogout} 
+                  className="text-red-400 hover:bg-slate-800 focus:bg-slate-800 hover:text-red-300 cursor-pointer"
+                >
+                  <div className="flex w-full items-center">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Cerrar Sesión</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/login" className="text-sm font-medium text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-full transition-colors">
+              Iniciar Sesión
+            </Link>
+          )}
         </div>
       </div>
     </header>
