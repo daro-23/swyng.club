@@ -27,9 +27,23 @@ const MOCK_CATALOG = [
   }
 ];
 
+// Mock database for profiles
+const PROFILES_DB: Record<string, any> = {
+  "1": { name: "David F.", role: "Founder", company: "Fintech Startup", imageUrl: "https://i.pravatar.cc/150?u=m1", rating: 4.9, bio: "Buscando escalar nuestra Serie A y encontrar partners clave en banca.", tags: ["Fintech", "Venture Capital"] },
+  "2": { name: "Ana V.", role: "Partner VC", company: "Seed Ventures", imageUrl: "https://i.pravatar.cc/150?u=m2", rating: 4.8, bio: "Invierto en B2B SaaS y me encanta el padel. Siempre abierta a buenos pitchs.", tags: ["SaaS", "Inversión"] },
+  "3": { name: "Carlos R.", role: "CTO", company: "DevShop Latam", imageUrl: "https://i.pravatar.cc/150?u=m3", rating: 4.5, bio: "Construyendo arquitecturas escalables. Ayudando a startups a lanzar su MVP.", tags: ["Ingeniería", "Web3"] },
+  "4": { name: "Sofia T.", role: "Growth", company: "ScaleUp Co", imageUrl: "https://i.pravatar.cc/150?u=m4", rating: 5.0, bio: "Experta en growth hacking B2B. Acelerando startups de LATAM a nivel global.", tags: ["Growth", "Marketing"] },
+  "5": { name: "Miguel A.", role: "CEO", company: "Retail Tech", imageUrl: "https://i.pravatar.cc/150?u=m5", rating: 4.7, bio: "Transformando el comercio local con IA y automatización.", tags: ["Retail", "AI"] },
+  "p1": { name: "Alejandro M.", role: "Founder & CEO", company: "PropTech Latam", imageUrl: "https://i.pravatar.cc/150?u=p1", rating: 4.8, bio: "Construyendo el futuro de Real Estate en México. Buscando levantar Serie A y conocer C-levels técnicos.", tags: ["Real Estate", "Venture Capital"] },
+  "p2": { name: "Valeria G.", role: "Partner", company: "Seed Ventures", imageUrl: "https://i.pravatar.cc/150?u=p2", rating: 4.9, bio: "Inversora temprana en SaaS y Fintech. Me encanta rebotar ideas en el hoyo 19.", tags: ["B2B SaaS", "Fintech"] },
+  "p3": { name: "Roberto S.", role: "CTO", company: "Fintech Startup", imageUrl: "https://i.pravatar.cc/150?u=p3", rating: 4.6, bio: "Arquitecto de software escalable. Apasionado por crypto y nuevos modelos de pago.", tags: ["Blockchain", "Engineering"] }
+};
+
 export default function MemberProfilePage() {
   const router = useRouter();
   const { id } = useParams();
+  
+  const profile = PROFILES_DB[id as string] || PROFILES_DB["p1"];
   
   const [likes, setLikes] = useState<Record<string, boolean>>({});
   const [questions, setQuestions] = useState<Record<string, string>>({});
@@ -60,24 +74,24 @@ export default function MemberProfilePage() {
         {/* Basic Info */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative pt-16 shadow-xl">
           <div className="absolute -top-16 left-6 h-28 w-28 rounded-2xl bg-slate-800 border-4 border-slate-900 shadow-xl overflow-hidden flex items-center justify-center">
-             <img src="https://i.pravatar.cc/150?u=p1" alt="Profile" className="w-full h-full object-cover" />
+             <img src={profile.imageUrl} alt={profile.name} className="w-full h-full object-cover" />
           </div>
           
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                Alejandro M. 
+                {profile.name} 
                 <Badge className="bg-primary/20 text-primary hover:bg-primary/30 border-0">Swynger PRO</Badge>
               </h1>
               <p className="text-slate-400 text-sm mt-1 flex items-center gap-2">
-                <Briefcase className="h-4 w-4" /> Founder & CEO en PropTech Latam
+                <Briefcase className="h-4 w-4" /> {profile.role} en {profile.company}
               </p>
               {/* Reputación / Rating */}
               <div className="flex items-center gap-1 mt-3">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className={`h-4 w-4 ${star <= 4 ? "text-yellow-500 fill-yellow-500" : "text-slate-600"}`} />
+                  <Star key={star} className={`h-4 w-4 ${star <= Math.floor(profile.rating) ? "text-yellow-500 fill-yellow-500" : "text-slate-600"}`} />
                 ))}
-                <span className="text-slate-400 text-sm ml-2 font-medium">4.8 (24 reseñas)</span>
+                <span className="text-slate-400 text-sm ml-2 font-medium">{profile.rating} (24 reseñas)</span>
               </div>
             </div>
             <Button className="bg-primary text-white hover:bg-primary/90">
@@ -86,13 +100,13 @@ export default function MemberProfilePage() {
           </div>
 
           <p className="text-slate-300 mt-5 leading-relaxed">
-            Construyendo el futuro de Real Estate en México. Buscando levantar Serie A y conocer C-levels técnicos.
+            {profile.bio}
           </p>
 
           <div className="flex flex-wrap gap-2 mt-6">
-            <span className="px-3 py-1 bg-slate-800 text-slate-300 rounded-full text-xs font-medium border border-slate-700">Real Estate</span>
-            <span className="px-3 py-1 bg-slate-800 text-slate-300 rounded-full text-xs font-medium border border-slate-700">Venture Capital</span>
-            <span className="px-3 py-1 bg-slate-800 text-slate-300 rounded-full text-xs font-medium border border-slate-700">SaaS B2B</span>
+            {profile.tags.map((tag: string, i: number) => (
+              <span key={i} className="px-3 py-1 bg-slate-800 text-slate-300 rounded-full text-xs font-medium border border-slate-700">{tag}</span>
+            ))}
           </div>
         </div>
 
