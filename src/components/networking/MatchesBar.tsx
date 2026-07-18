@@ -26,7 +26,7 @@ export function MatchesBar() {
       <h2 className="text-white font-bold mb-3 px-4">Tus Conexiones</h2>
       <div className="flex overflow-x-auto pb-4 pt-2 px-4 gap-4 hide-scrollbar">
         {MOCK_MATCHES.map((match, i) => (
-          <Link href={`/locker-room`} key={match.id}>
+          <Link href={`/member/${match.id}`} key={match.id}>
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}

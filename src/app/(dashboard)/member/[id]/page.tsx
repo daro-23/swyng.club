@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Briefcase, Target, Activity, Heart, MessageCircle, ArrowLeft, Send } from "lucide-react";
+import { User, Briefcase, Target, Activity, Heart, MessageCircle, ArrowLeft, Send, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -71,13 +71,20 @@ export default function MemberProfilePage() {
               <p className="text-slate-400 text-sm mt-1 flex items-center gap-2">
                 <Briefcase className="h-4 w-4" /> Founder & CEO en PropTech Latam
               </p>
+              {/* Reputación / Rating */}
+              <div className="flex items-center gap-1 mt-3">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} className={`h-4 w-4 ${star <= 4 ? "text-yellow-500 fill-yellow-500" : "text-slate-600"}`} />
+                ))}
+                <span className="text-slate-400 text-sm ml-2 font-medium">4.8 (24 reseñas)</span>
+              </div>
             </div>
             <Button className="bg-primary text-white hover:bg-primary/90">
               Conectar
             </Button>
           </div>
 
-          <p className="text-slate-300 mt-6 leading-relaxed">
+          <p className="text-slate-300 mt-5 leading-relaxed">
             Construyendo el futuro de Real Estate en México. Buscando levantar Serie A y conocer C-levels técnicos.
           </p>
 
