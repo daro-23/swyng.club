@@ -2,9 +2,10 @@
 
 import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from "framer-motion";
 import { Briefcase, Building, X, Heart, Info } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export interface SwipeProfile {
   id: string;
@@ -135,14 +136,26 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
             variant="outline" 
             className="w-14 h-14 rounded-full border-red-500/50 bg-slate-900/80 text-red-500 hover:bg-red-500/20 hover:text-red-400 pointer-events-auto backdrop-blur-sm shadow-lg"
             onClick={() => handleButtonSwipe("left")}
+            onPointerDown={(e) => e.stopPropagation()}
           >
             <X className="w-6 h-6" />
           </Button>
+          <Link href={`/member/${profile.id}`} className="pointer-events-auto">
+            <Button 
+              size="icon" 
+              variant="outline" 
+              className="w-12 h-12 rounded-full border-slate-500/50 bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white backdrop-blur-sm shadow-lg mb-2"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <Info className="w-5 h-5" />
+            </Button>
+          </Link>
           <Button 
             size="icon" 
             variant="outline" 
             className="w-14 h-14 rounded-full border-emerald-500/50 bg-slate-900/80 text-emerald-500 hover:bg-emerald-500/20 hover:text-emerald-400 pointer-events-auto backdrop-blur-sm shadow-lg"
             onClick={() => handleButtonSwipe("right")}
+            onPointerDown={(e) => e.stopPropagation()}
           >
             <Heart className="w-6 h-6" />
           </Button>
