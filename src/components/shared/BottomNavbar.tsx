@@ -6,13 +6,13 @@ import { Home, CalendarPlus, MessageSquare, Bot, Users } from "lucide-react";
 
 const NAV_ITEMS = [
   {
-    name: "Clubhouse",
-    href: "/discover",
+    name: "Inicio",
+    href: "/home",
     icon: Home,
   },
   {
-    name: "Mis Retas",
-    href: "/mis-retas",
+    name: "Clubhouse",
+    href: "/discover",
     icon: CalendarPlus,
   },
   {

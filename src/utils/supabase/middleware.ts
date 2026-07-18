@@ -62,7 +62,8 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isAuthRoute = request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname.startsWith("/signup");
-  const isProtectedRoute = request.nextUrl.pathname.startsWith("/discover") || 
+  const isProtectedRoute = request.nextUrl.pathname.startsWith("/home") ||
+                           request.nextUrl.pathname.startsWith("/discover") || 
                            request.nextUrl.pathname.startsWith("/caddy") || 
                            request.nextUrl.pathname.startsWith("/locker-room") || 
                            request.nextUrl.pathname.startsWith("/directory") ||
@@ -79,7 +80,14 @@ export async function updateSession(request: NextRequest) {
   if (user && isAuthRoute) {
     // User is logged in, redirect away from login page
     const url = request.nextUrl.clone();
-    url.pathname = "/discover";
+    url.pathname = "/home";
+    return NextResponse.redirect(url);
+  }
+
+  // If user accesses root "/", redirect to /home if logged in, or /login if not
+  if (request.nextUrl.pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = user ? "/home" : "/login";
     return NextResponse.redirect(url);
   }
 

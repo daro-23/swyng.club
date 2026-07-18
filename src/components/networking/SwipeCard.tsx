@@ -1,0 +1,154 @@
+"use client";
+
+import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from "framer-motion";
+import { Briefcase, Building, X, Heart, Info } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+export interface SwipeProfile {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  bio: string;
+  interests: string[];
+}
+
+interface SwipeCardProps {
+  profile: SwipeProfile;
+  index: number;
+  onSwipe: (id: string, direction: "left" | "right") => void;
+}
+
+export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
+  const x = useMotionValue(0);
+  const controls = useAnimation();
+  const [exitX, setExitX] = useState(0);
+
+  // Rotation and opacity transforms based on x drag
+  const rotate = useTransform(x, [-200, 200], [-15, 15]);
+  const opacity = useTransform(x, [-200, -150, 0, 150, 200], [0, 1, 1, 1, 0]);
+  
+  // Icon opacities
+  const nopeOpacity = useTransform(x, [-150, -50, 0], [1, 0, 0]);
+  const likeOpacity = useTransform(x, [0, 50, 150], [0, 0, 1]);
+
+  const handleDragEnd = async (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const offset = info.offset.x;
+    const velocity = info.velocity.x;
+
+    if (offset > 100 || velocity > 500) {
+      setExitX(300);
+      onSwipe(profile.id, "right");
+    } else if (offset < -100 || velocity < -500) {
+      setExitX(-300);
+      onSwipe(profile.id, "left");
+    } else {
+      controls.start({ x: 0, rotate: 0 });
+    }
+  };
+
+  const handleButtonSwipe = (direction: "left" | "right") => {
+    setExitX(direction === "left" ? -300 : 300);
+    onSwipe(profile.id, direction);
+  };
+
+  return (
+    <motion.div
+      className="absolute top-0 left-0 w-full h-full"
+      style={{
+        zIndex: 100 - index,
+        x,
+        rotate,
+        opacity,
+      }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={handleDragEnd}
+      animate={controls}
+      exit={{ x: exitX, opacity: 0, transition: { duration: 0.2 } }}
+    >
+      <div className="w-full h-full rounded-3xl bg-slate-900 border border-slate-800 shadow-xl overflow-hidden relative flex flex-col">
+        
+        {/* Swipe Indicators */}
+        <motion.div 
+          className="absolute top-8 right-8 border-4 border-red-500 rounded-lg px-4 py-1 z-20 rotate-12"
+          style={{ opacity: nopeOpacity }}
+        >
+          <span className="text-red-500 font-bold text-2xl uppercase tracking-wider">Nope</span>
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-8 left-8 border-4 border-emerald-500 rounded-lg px-4 py-1 z-20 -rotate-12"
+          style={{ opacity: likeOpacity }}
+        >
+          <span className="text-emerald-500 font-bold text-2xl uppercase tracking-wider">Sinergia</span>
+        </motion.div>
+
+        {/* Profile Image / Header Area */}
+        <div className="flex-1 bg-gradient-to-b from-slate-800 to-slate-900 relative">
+           <div className="absolute inset-0 bg-slate-800/50 flex flex-col items-center justify-center">
+             <div className="w-32 h-32 rounded-full bg-slate-700 border-4 border-[#040814] flex items-center justify-center mb-4">
+               <span className="text-4xl text-slate-400 font-bold">{profile.name.charAt(0)}</span>
+             </div>
+           </div>
+           
+           {/* Gradient Overlay for Text */}
+           <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-slate-900 to-transparent"></div>
+        </div>
+
+        {/* Profile Info */}
+        <div className="p-6 bg-slate-900 z-10 flex flex-col justify-end">
+          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            {profile.name}
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Swynger</Badge>
+          </h2>
+          
+          <div className="flex items-center text-slate-300 mt-2 text-sm font-medium">
+            <Briefcase className="w-4 h-4 mr-2" />
+            {profile.role}
+          </div>
+          
+          <div className="flex items-center text-slate-400 mt-1 text-sm">
+            <Building className="w-4 h-4 mr-2" />
+            {profile.company}
+          </div>
+
+          <p className="text-slate-400 text-sm mt-4 line-clamp-3">
+            {profile.bio}
+          </p>
+
+          <div className="flex flex-wrap gap-2 mt-4">
+            {profile.interests.map((interest, i) => (
+              <span key={i} className="px-3 py-1 bg-slate-800 rounded-full text-xs text-slate-300">
+                {interest}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-6 z-20 pointer-events-none">
+          <Button 
+            size="icon" 
+            variant="outline" 
+            className="w-14 h-14 rounded-full border-red-500/50 bg-slate-900/80 text-red-500 hover:bg-red-500/20 hover:text-red-400 pointer-events-auto backdrop-blur-sm shadow-lg"
+            onClick={() => handleButtonSwipe("left")}
+          >
+            <X className="w-6 h-6" />
+          </Button>
+          <Button 
+            size="icon" 
+            variant="outline" 
+            className="w-14 h-14 rounded-full border-emerald-500/50 bg-slate-900/80 text-emerald-500 hover:bg-emerald-500/20 hover:text-emerald-400 pointer-events-auto backdrop-blur-sm shadow-lg"
+            onClick={() => handleButtonSwipe("right")}
+          >
+            <Heart className="w-6 h-6" />
+          </Button>
+        </div>
+
+      </div>
+    </motion.div>
+  );
+}

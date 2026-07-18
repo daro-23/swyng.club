@@ -33,7 +33,7 @@ export default function LoginPage() {
     }
 
     toast.success("¡Bienvenido al Club!");
-    router.push("/discover");
+    router.push("/home");
     router.refresh();
   };
 
