@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
+import { useChat } from "ai/react";
 import { Bot, Send, User, Sparkles, ShieldAlert, FileText, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,16 +14,14 @@ const SUGGESTIONS = [
 ];
 
 export default function CaddyPage() {
-  const { messages, sendMessage, status } = useChat();
+  const { messages, append, isLoading } = useChat();
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  const isLoading = status === 'submitted' || status === 'streaming';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    sendMessage({ role: "user", content: input });
+    append({ role: "user", content: input });
     setInput("");
   };
 

@@ -53,7 +53,7 @@ export function CreateRetaModal() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger {...({ asChild: true } as any)}>
         <button className="fixed bottom-20 right-4 sm:right-8 sm:bottom-8 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_40px_-10px_rgba(255,106,0,0.8)] hover:scale-105 transition-transform">
           <Plus className="h-6 w-6" />
         </button>
