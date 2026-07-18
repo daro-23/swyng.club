@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, CalendarPlus, MessageSquare, Bot } from "lucide-react";
+import { Home, CalendarPlus, MessageSquare, Bot, Users } from "lucide-react";
 
 const NAV_ITEMS = [
   {
@@ -21,7 +21,12 @@ const NAV_ITEMS = [
     icon: Bot,
   },
   {
-    name: "Locker Room",
+    name: "Directorio",
+    href: "/directory",
+    icon: Users,
+  },
+  {
+    name: "Locker",
     href: "/locker-room",
     icon: MessageSquare,
   },
