@@ -28,7 +28,7 @@ export function TopHeader() {
           </button>
           
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger {...({ asChild: true } as any)}>
               <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none">
                 <User className="h-4 w-4 text-slate-300" />
               </button>
