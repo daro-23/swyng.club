@@ -14,14 +14,16 @@ const SUGGESTIONS = [
 ];
 
 export default function CaddyPage() {
-  const { messages, append, isLoading } = useChat();
+  const { messages, sendMessage, status } = useChat();
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  const isLoading = status === 'submitted' || status === 'streaming';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    append({ role: "user", content: input });
+    sendMessage({ role: "user", content: input });
     setInput("");
   };
 
