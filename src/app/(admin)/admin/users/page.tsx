@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Table,
-  Body,
-  Cell,
-  Head,
-  Header,
-  Row,
-} from "@/components/ui/table"; // Assuming standard shadcn table or simple HTML tables
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
 const MOCK_USERS = [
@@ -45,49 +45,48 @@ export default function AdminUsersPage() {
       </div>
 
       <div className="rounded-md border border-slate-800 bg-slate-900">
-        <table className="w-full text-sm text-left">
-          <thead className="text-xs uppercase bg-slate-950/50 text-slate-400 border-b border-slate-800">
-            <tr>
-              <th className="px-6 py-4 font-medium">Nombre / Email</th>
-              <th className="px-6 py-4 font-medium">Rol</th>
-              <th className="px-6 py-4 font-medium">Estado</th>
-              <th className="px-6 py-4 font-medium">Registro</th>
-              <th className="px-6 py-4 font-medium text-right">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800">
-            {filtered.map(user => (
-              <tr key={user.id} className="hover:bg-slate-800/50 transition-colors">
-                <td className="px-6 py-4">
-                  <div className="font-medium text-white">{user.name}</div>
-                  <div className="text-slate-500">{user.email}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <Badge variant="outline" className="border-slate-700 text-slate-300">
-                    {user.role}
+        <Table>
+          <TableHeader>
+            <TableRow className="border-slate-800 hover:bg-transparent">
+              <TableHead className="text-slate-400">Usuario</TableHead>
+              <TableHead className="text-slate-400">Plan</TableHead>
+              <TableHead className="text-slate-400">Estado</TableHead>
+              <TableHead className="text-slate-400 text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.map((user) => (
+              <TableRow key={user.id} className="border-slate-800 hover:bg-slate-800/50">
+                <TableCell className="font-medium text-white">
+                  {user.name}
+                  <div className="text-xs text-slate-500 font-normal">{user.email}</div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={
+                    user.plan === "Founder" ? "border-primary text-primary" : 
+                    user.plan === "Club Member" ? "border-emerald-500 text-emerald-500" : 
+                    "border-slate-600 text-slate-400"
+                  }>
+                    {user.plan}
                   </Badge>
-                </td>
-                <td className="px-6 py-4">
-                  {user.status === "Active" ? (
-                    <span className="flex items-center text-emerald-400 text-xs">
-                      <CheckCircle2 className="mr-1 h-3 w-3" /> Activo
-                    </span>
-                  ) : (
-                    <span className="flex items-center text-red-400 text-xs">
-                      <ShieldAlert className="mr-1 h-3 w-3" /> Suspendido
-                    </span>
-                  )}
-                </td>
-                <td className="px-6 py-4 text-slate-400">{user.joined}</td>
-                <td className="px-6 py-4 text-right">
-                  <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={
+                    user.status === "Activo" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : 
+                    "bg-slate-800 text-slate-400 border-slate-700"
+                  }>
+                    {user.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-slate-800">
                     <MoreVertical className="h-4 w-4" />
                   </Button>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

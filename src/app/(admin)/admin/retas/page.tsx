@@ -1,10 +1,19 @@
-import { CalendarDays, MapPin, Users, Trash2 } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const MOCK_RETAS = [
-  { id: 1, host: "Carlos Mendoza", sport: "Pádel", location: "Club Pádel MTY", date: "Hoy, 19:00 hrs", players: "2/4", status: "Buscando" },
-  { id: 2, host: "Ana Victoria", sport: "Golf", location: "Bosque Real", date: "Sábado, 08:00 hrs", players: "3/4", status: "Confirmada" },
-  { id: 3, host: "Spam User", sport: "Pádel", location: "Fake Location", date: "Mañana", players: "1/4", status: "Reportada" },
+  { id: 1, creator: "Carlos Mendoza", sport: "Pádel", location: "Club Pádel MTY", time: "Hoy, 19:00 hrs", players: "2/4", status: "Buscando" },
+  { id: 2, creator: "Ana Victoria", sport: "Golf", location: "Bosque Real", time: "Sábado, 08:00 hrs", players: "3/4", status: "Confirmada" },
+  { id: 3, creator: "Spam User", sport: "Pádel", location: "Fake Location", time: "Mañana", players: "1/4", status: "Reportada" },
 ];
 
 export default function AdminRetasPage() {
@@ -15,30 +24,43 @@ export default function AdminRetasPage() {
         <p className="text-slate-400">Supervisa las retas creadas y elimina contenido inapropiado.</p>
       </div>
 
-      <div className="grid gap-4">
-        {MOCK_RETAS.map(reta => (
-          <div key={reta.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-slate-800 bg-slate-900 gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-white">{reta.sport}</span>
-                <span className="text-slate-500 text-sm">organizado por {reta.host}</span>
-                {reta.status === "Reportada" && (
-                  <span className="bg-red-500/20 text-red-400 text-[10px] uppercase px-2 py-0.5 rounded font-bold">Reportada</span>
-                )}
-              </div>
-              <div className="flex items-center gap-4 text-sm text-slate-400">
-                <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {reta.location}</span>
-                <span className="flex items-center gap-1"><CalendarDays className="h-3 w-3" /> {reta.date}</span>
-                <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {reta.players}</span>
-              </div>
-            </div>
-            <div>
-              <Button variant="outline" className="border-red-900 text-red-400 bg-red-950/30 hover:bg-red-900/50 hover:text-red-300">
-                <Trash2 className="h-4 w-4 mr-2" /> Eliminar Reta
-              </Button>
-            </div>
-          </div>
-        ))}
+      <div className="rounded-md border border-slate-800 bg-slate-900">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-slate-800 hover:bg-transparent">
+              <TableHead className="text-slate-400">Deporte</TableHead>
+              <TableHead className="text-slate-400">Creador</TableHead>
+              <TableHead className="text-slate-400">Estado</TableHead>
+              <TableHead className="text-slate-400 text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {MOCK_RETAS.map((reta) => (
+              <TableRow key={reta.id} className="border-slate-800 hover:bg-slate-800/50">
+                <TableCell className="font-medium text-white capitalize">
+                  {reta.sport}
+                  <div className="text-xs text-slate-500 font-normal">{reta.time}</div>
+                </TableCell>
+                <TableCell className="text-slate-300">
+                  {reta.creator}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className={
+                    reta.status === "Reportada" ? "bg-red-500/10 text-red-500 border-red-500/20" : 
+                    "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                  }>
+                    {reta.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-slate-800">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
