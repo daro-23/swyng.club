@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 import { Bell, User, Settings, LogOut } from "lucide-react";
 import {
   DropdownMenu,
@@ -10,6 +14,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function TopHeader() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-800 bg-[#040814]/80 backdrop-blur-xl">
       <div className="container flex h-14 items-center justify-between px-4">
@@ -54,9 +67,15 @@ export function TopHeader() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-slate-800" />
-              <DropdownMenuItem className="text-red-400 hover:bg-slate-800 focus:bg-slate-800 hover:text-red-300 cursor-pointer">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Cerrar Sesión</span>
+              <DropdownMenuItem 
+                {...({ asChild: true } as any)}
+                onClick={handleLogout} 
+                className="text-red-400 hover:bg-slate-800 focus:bg-slate-800 hover:text-red-300 cursor-pointer"
+              >
+                <div className="flex w-full items-center">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Cerrar Sesión</span>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
