@@ -1,11 +1,12 @@
 "use client";
 
-import { User, Briefcase, Target, Activity, Save } from "lucide-react";
+import { User, Briefcase, Target, Activity, Save, Ghost } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
@@ -39,6 +40,18 @@ export default function ProfilePage() {
               <Button variant="outline" className="border-slate-700 text-white bg-slate-800 hover:bg-slate-700" type="button">
                 Cambiar Foto
               </Button>
+            </div>
+
+            {/* Rol Específico: Inversor */}
+            <div className="flex items-center justify-between p-4 mb-6 rounded-lg bg-slate-800/50 border border-slate-700">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <Ghost className="h-4 w-4 text-primary" />
+                  <Label className="text-white font-medium">Modo Incógnito (Inversor)</Label>
+                </div>
+                <p className="text-xs text-slate-400">Navega por las retas sin que tu perfil aparezca en el directorio.</p>
+              </div>
+              <Switch />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
