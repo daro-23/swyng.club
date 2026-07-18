@@ -5,20 +5,13 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Bell, User, Settings, LogOut, ChevronLeft } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 export function TopHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
   const [user, setUser] = useState<any>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
@@ -57,42 +50,47 @@ export function TopHeader() {
           </button>
           
           {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none">
+            <div className="relative">
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none"
+              >
                 <User className="h-4 w-4 text-slate-300" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-300">
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none text-white">Darío (Tú)</p>
-                    <p className="text-xs leading-none text-slate-400">{user.email}</p>
+              </button>
+              
+              {isMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-800 bg-slate-900 shadow-xl z-50 overflow-hidden">
+                     <div className="px-4 py-3 bg-slate-800/30">
+                       <p className="text-sm font-medium text-white">Darío (Tú)</p>
+                       <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                     </div>
+                     <div className="border-t border-slate-800" />
+                     <div className="py-1">
+                       <Link href="/profile" className="flex w-full items-center px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>
+                         <User className="mr-2 h-4 w-4" />
+                         Mi Perfil
+                       </Link>
+                       <Link href="/pricing" className="flex w-full items-center px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>
+                         <Settings className="mr-2 h-4 w-4" />
+                         Suscripción
+                       </Link>
+                     </div>
+                     <div className="border-t border-slate-800" />
+                     <div className="py-1">
+                       <button onClick={handleLogout} className="flex w-full items-center px-4 py-2.5 text-sm text-red-400 hover:bg-slate-800 hover:text-red-300 transition-colors text-left">
+                         <LogOut className="mr-2 h-4 w-4" />
+                         Cerrar Sesión
+                       </button>
+                     </div>
                   </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-slate-800" />
-                <DropdownMenuItem className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer p-0">
-                  <Link href="/profile" className="flex w-full items-center px-2 py-1.5">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Mi Perfil</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer p-0">
-                  <Link href="/pricing" className="flex w-full items-center px-2 py-1.5">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Suscripción</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-slate-800" />
-                <DropdownMenuItem 
-                  onClick={handleLogout} 
-                  className="text-red-400 hover:bg-slate-800 focus:bg-slate-800 hover:text-red-300 cursor-pointer"
-                >
-                  <div className="flex w-full items-center">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Cerrar Sesión</span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </>
+              )}
+            </div>
           ) : (
             <Link href="/login" className="text-sm font-medium text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-full transition-colors">
               Iniciar Sesión
