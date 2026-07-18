@@ -41,13 +41,13 @@ export function TopHeader() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-slate-800" />
-              <DropdownMenuItem asChild className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
+              <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
                 <Link href="/profile" className="flex w-full items-center">
                   <User className="mr-2 h-4 w-4" />
                   <span>Mi Perfil</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
+              <DropdownMenuItem {...({ asChild: true } as any)} className="hover:bg-slate-800 focus:bg-slate-800 cursor-pointer">
                 <Link href="/pricing" className="flex w-full items-center">
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Suscripción</span>
