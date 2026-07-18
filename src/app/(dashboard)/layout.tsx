@@ -34,6 +34,8 @@ export default async function DashboardLayout({
     if (!profile || !profile.onboarding_completed) {
       redirect("/onboarding");
     }
+  } else {
+    redirect("/login");
   }
 
   return (
