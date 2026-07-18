@@ -73,17 +73,17 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
         
         {/* Swipe Indicators */}
         <motion.div 
-          className="absolute top-8 right-8 border-4 border-red-500 rounded-lg px-4 py-1 z-20 rotate-12"
+          className="absolute top-12 right-8 border-4 border-red-500 rounded-xl px-6 py-2 z-30 rotate-12 bg-slate-900/40 backdrop-blur-sm"
           style={{ opacity: nopeOpacity }}
         >
-          <span className="text-red-500 font-bold text-2xl uppercase tracking-wider">Nope</span>
+          <span className="text-red-500 font-black text-4xl uppercase tracking-widest shadow-sm">Nope</span>
         </motion.div>
         
         <motion.div 
-          className="absolute top-8 left-8 border-4 border-emerald-500 rounded-lg px-4 py-1 z-20 -rotate-12"
+          className="absolute top-12 left-8 border-4 border-emerald-500 rounded-xl px-6 py-2 z-30 -rotate-12 bg-slate-900/40 backdrop-blur-sm"
           style={{ opacity: likeOpacity }}
         >
-          <span className="text-emerald-500 font-bold text-2xl uppercase tracking-wider">Sinergia</span>
+          <span className="text-emerald-500 font-black text-4xl uppercase tracking-widest shadow-sm">Sinergia</span>
         </motion.div>
 
         {/* Profile Image / Header Area */}
@@ -99,7 +99,7 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
         </div>
 
         {/* Profile Info */}
-        <div className="p-6 bg-slate-900 z-10 flex flex-col justify-end">
+        <div className="p-6 pb-24 bg-slate-900 z-10 flex flex-col justify-end">
           <h2 className="text-2xl font-bold text-white flex items-center gap-2">
             {profile.name}
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Swynger</Badge>
@@ -129,7 +129,7 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-6 z-20 pointer-events-none">
+        <div className="absolute bottom-6 left-0 w-full flex justify-center gap-8 z-20 pointer-events-none">
           <Button 
             size="icon" 
             variant="outline" 
