@@ -7,56 +7,52 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LogIn, Loader2 } from "lucide-react";
+import { LogIn, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    // Intentar iniciar sesión primero
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      toast.error(error.message);
-      setLoading(false);
+    if (signInError) {
+      // Si falla, intentamos registrar al usuario de forma invisible
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (signUpError) {
+        // Si el registro también falla (ej. contraseña muy corta), mostramos error
+        toast.error(signInError.message === "Invalid login credentials" ? "Credenciales inválidas." : signInError.message);
+        setLoading(false);
+        return;
+      }
+      
+      // Si el registro fue exitoso
+      toast.success("¡Cuenta creada exitosamente! Bienvenido al Club.");
+      router.push("/home");
+      router.refresh();
       return;
     }
 
-    toast.success("¡Bienvenido al Club!");
+    // Si el inicio de sesión fue exitoso
+    toast.success("¡Bienvenido de vuelta!");
     router.push("/home");
     router.refresh();
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      toast.error(error.message);
-      setLoading(false);
-      return;
-    }
-
-    toast.success("Revisa tu correo para verificar tu cuenta.");
-    setLoading(false);
   };
 
   return (
@@ -68,10 +64,10 @@ export default function LoginPage() {
           <h1 className="text-4xl font-bold tracking-tighter text-white">
             swyng<span className="text-primary">.</span>
           </h1>
-          <p className="text-slate-400">Inicia sesión o regístrate en el club.</p>
+          <p className="text-slate-400">Accede a tu cuenta o crea una nueva al instante.</p>
         </div>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleAuth}>
           <div className="space-y-2">
             <Label htmlFor="email" className="text-slate-300">Correo Electrónico</Label>
             <Input
@@ -86,33 +82,38 @@ export default function LoginPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="password" className="text-slate-300">Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="bg-slate-900 border-slate-800 text-white h-12"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="bg-slate-900 border-slate-800 text-white h-12 pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col gap-3 pt-2">
             <Button 
-              onClick={handleLogin}
+              type="submit"
               disabled={loading}
               className="w-full bg-primary text-white hover:bg-primary/90 h-12 text-md font-semibold"
             >
               {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <LogIn className="mr-2 h-5 w-5" />}
               Entrar al Club
-            </Button>
-            <Button 
-              onClick={handleSignUp}
-              disabled={loading}
-              variant="outline"
-              className="w-full border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white h-12"
-            >
-              Solicitar Acceso (Registro)
             </Button>
           </div>
         </form>
