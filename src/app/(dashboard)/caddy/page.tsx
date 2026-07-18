@@ -14,8 +14,16 @@ const SUGGESTIONS = [
 ];
 
 export default function CaddyPage() {
-  const { messages, input, handleInputChange, handleSubmit, setInput, isLoading } = useChat();
+  const { messages, append, isLoading } = useChat();
+  const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    append({ role: "user", content: input });
+    setInput("");
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -101,7 +109,7 @@ export default function CaddyPage() {
           <form onSubmit={handleSubmit} className="flex gap-2">
             <Input
               value={input}
-              onChange={handleInputChange}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Pregúntale a Caddy sobre contratos o startups..."
               className="bg-slate-900 border-slate-800 text-white h-12 focus-visible:ring-primary rounded-full px-5"
             />
