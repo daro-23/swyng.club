@@ -1,60 +1,126 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LogIn, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+
+    toast.success("¡Bienvenido al Club!");
+    router.push("/discover");
+    router.refresh();
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+
+    toast.success("Revisa tu correo para verificar tu cuenta.");
+    setLoading(false);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-4 relative overflow-hidden bg-background">
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+    <div className="flex h-screen w-full items-center justify-center bg-[#040814] px-4">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-[#040814] to-[#040814] opacity-50"></div>
       
-      <Link href="/" className="absolute top-8 left-8 text-2xl font-bold tracking-tighter text-white z-10">
-        swyng<span className="text-primary">.</span>
-      </Link>
+      <div className="relative z-10 w-full max-w-md space-y-8 rounded-2xl border border-slate-800 bg-[#070b19]/80 p-8 shadow-2xl backdrop-blur-xl">
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-bold tracking-tighter text-white">
+            swyng<span className="text-primary">.</span>
+          </h1>
+          <p className="text-slate-400">Inicia sesión o regístrate en el club.</p>
+        </div>
 
-      <Card className="w-full max-w-md bg-slate-900/80 border-slate-800 backdrop-blur-xl shadow-2xl z-10">
-        <CardHeader className="space-y-2 text-center pb-6">
-          <CardTitle className="text-3xl font-bold text-white tracking-tight">Welcome to the Club</CardTitle>
-          <CardDescription className="text-slate-400">Sign in via Magic Link.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setLoading(true); setTimeout(() => window.location.href = '/onboarding', 1000); }}>
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-300">Email address</Label>
-              <Input 
-                id="email" 
-                required
-                placeholder="founder@startup.com" 
-                type="email" 
-                className="bg-slate-950/50 border-slate-700 text-white placeholder:text-slate-600 h-12 focus-visible:ring-primary"
-              />
-            </div>
-            
-            <button 
-              type="submit" 
+        <form className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-slate-300">Correo Electrónico</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="tu@startup.com"
+              className="bg-slate-900 border-slate-800 text-white h-12"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-slate-300">Contraseña</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              className="bg-slate-900 border-slate-800 text-white h-12"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 pt-2">
+            <Button 
+              onClick={handleLogin}
               disabled={loading}
-              className={buttonVariants({ variant: "default", className: "w-full h-12 text-md font-semibold bg-primary hover:bg-primary/90 text-primary-foreground transition-all mt-4" })}
+              className="w-full bg-primary text-white hover:bg-primary/90 h-12 text-md font-semibold"
             >
-              {loading ? "Sending link..." : "Continue with Email"}
-            </button>
-            
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-800" /></div>
-              <div className="relative flex justify-center text-xs uppercase"><span className="bg-slate-900 px-2 text-slate-500">Or continue with</span></div>
-            </div>
+              {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <LogIn className="mr-2 h-5 w-5" />}
+              Entrar al Club
+            </Button>
+            <Button 
+              onClick={handleSignUp}
+              disabled={loading}
+              variant="outline"
+              className="w-full border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white h-12"
+            >
+              Solicitar Acceso (Registro)
+            </Button>
+          </div>
+        </form>
 
-            <button type="button" className={buttonVariants({ variant: "outline", className: "w-full h-12 text-md bg-slate-950/50 border-slate-700 hover:bg-slate-800 text-white transition-all" })}>
-              Google
-            </button>
-          </form>
-        </CardContent>
-      </Card>
+        <p className="text-center text-xs text-slate-500 mt-6">
+          Al continuar, aceptas nuestros <Link href="#" className="text-primary hover:underline">Términos de Servicio</Link> y <Link href="#" className="text-primary hover:underline">Política de Privacidad</Link>.
+        </p>
+      </div>
     </div>
   );
 }
