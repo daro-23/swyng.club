@@ -15,10 +15,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 const MOCK_USERS = [
-  { id: "1", name: "Ana Victoria", email: "ana@latam.vc", role: "Investor", status: "Active", joined: "2024-01-15" },
-  { id: "2", name: "Carlos Mendoza", email: "carlos@paystream.io", role: "Founder", status: "Active", joined: "2024-02-10" },
-  { id: "3", name: "Sofía Téllez", email: "sofia@growth.com", role: "Provider", status: "Active", joined: "2024-03-05" },
-  { id: "4", name: "Usuario Spam", email: "bot@spam.com", role: "Founder", status: "Suspended", joined: "2024-03-20" },
+  { id: "usr_1", name: "David F.", email: "david@startup.com", role: "Founder", plan: "Founder", status: "Activo", joined: "2024-03-01" },
+  { id: "usr_2", name: "Ana V.", email: "ana@vc.com", role: "Partner", plan: "Club Member", status: "Activo", joined: "2024-03-05" },
+  { id: "usr_3", name: "Spam Bot", email: "spam@bot.net", role: "Player", plan: "Free", status: "Suspendido", joined: "2024-03-10" },
 ];
 
 export default function AdminUsersPage() {
