@@ -12,9 +12,21 @@ export function TopHeader() {
   const supabase = createClient();
   const [user, setUser] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [profileImg, setProfileImg] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    
+    // Load custom profile image if exists
+    const loadImg = () => {
+      const saved = localStorage.getItem('swyng_profile_img');
+      if (saved) setProfileImg(saved);
+    };
+    loadImg();
+    
+    // Listen for cross-component updates
+    window.addEventListener('profileImageUpdated', loadImg);
+    return () => window.removeEventListener('profileImageUpdated', loadImg);
   }, [supabase.auth]);
 
   const handleLogout = async () => {
@@ -55,9 +67,13 @@ export function TopHeader() {
             <div className="relative">
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 border border-slate-700 hover:border-primary transition-colors focus:outline-none overflow-hidden shrink-0"
               >
-                <User className="h-4 w-4 text-slate-300" />
+                {profileImg ? (
+                  <img src={profileImg} alt="Profile" className="h-full w-full object-cover" />
+                ) : (
+                  <User className="h-4 w-4 text-slate-300" />
+                )}
               </button>
               
               {isMenuOpen && (

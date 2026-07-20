@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const NETWORKING_TAGS = [
   "Inversión (Venture Capital)",
@@ -34,12 +34,31 @@ export default function ProfilePage() {
   const profileImageRef = useRef<HTMLInputElement>(null);
   const companyLogoRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string) => void) => {
+  useEffect(() => {
+    // Load from localStorage on mount
+    const savedProfile = localStorage.getItem('swyng_profile_img');
+    const savedLogo = localStorage.getItem('swyng_logo_img');
+    if (savedProfile) setProfileImage(savedProfile);
+    if (savedLogo) setCompanyLogo(savedLogo);
+  }, []);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string) => void, storageKey: string) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setter(url);
-      toast.success("Imagen cargada (vista previa)");
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setter(base64String);
+        localStorage.setItem(storageKey, base64String);
+        
+        // Dispatch custom event to update TopHeader
+        if (storageKey === 'swyng_profile_img') {
+           window.dispatchEvent(new Event('profileImageUpdated'));
+        }
+        
+        toast.success("Imagen guardada exitosamente");
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -86,10 +105,10 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <input 
                   type="file" 
-                  accept="image/*" 
+                  accept="image/png, image/jpeg, image/jpg" 
                   className="hidden" 
                   ref={profileImageRef}
-                  onChange={(e) => handleImageUpload(e, setProfileImage)}
+                  onChange={(e) => handleImageUpload(e, setProfileImage, 'swyng_profile_img')}
                 />
                 <Button 
                   variant="outline" 
@@ -152,10 +171,10 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <input 
                   type="file" 
-                  accept="image/*" 
+                  accept="image/png, image/jpeg, image/jpg" 
                   className="hidden" 
                   ref={companyLogoRef}
-                  onChange={(e) => handleImageUpload(e, setCompanyLogo)}
+                  onChange={(e) => handleImageUpload(e, setCompanyLogo, 'swyng_logo_img')}
                 />
                 <Label className="text-white block">Logo de la Empresa</Label>
                 <Button 
