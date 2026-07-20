@@ -81,7 +81,7 @@ export default function MemberProfilePage() {
             <div>
               <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                 {profile.name} 
-                <Badge className="bg-primary/20 text-primary hover:bg-primary/30 border-0">Swynger PRO</Badge>
+                <Badge className="bg-primary/20 text-primary hover:bg-primary/30 border-0">SwyngPro</Badge>
               </h1>
               <p className="text-slate-400 text-sm mt-1 flex items-center gap-2">
                 <Briefcase className="h-4 w-4" /> {profile.role} en {profile.company}

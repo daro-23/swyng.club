@@ -124,7 +124,7 @@ export function SwipeCard({ profile, index, onSwipe }: SwipeCardProps) {
         <div className="p-6 pb-24 z-10 flex flex-col justify-end pointer-events-none">
           <h2 className="text-2xl font-bold text-white flex items-center gap-2">
             {profile.name}
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Swynger</Badge>
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">SwyngPro</Badge>
           </h2>
           
           <div className="flex items-center text-slate-300 mt-2 text-sm font-medium">
