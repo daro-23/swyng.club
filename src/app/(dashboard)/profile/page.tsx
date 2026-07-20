@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const NETWORKING_TAGS = [
   "Inversión (Venture Capital)",
@@ -28,6 +28,20 @@ export default function ProfilePage() {
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [newItemTitle, setNewItemTitle] = useState("");
   const [newItemDesc, setNewItemDesc] = useState("");
+
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
+  const profileImageRef = useRef<HTMLInputElement>(null);
+  const companyLogoRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string) => void) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setter(url);
+      toast.success("Imagen cargada (vista previa)");
+    }
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,13 +75,32 @@ export default function ProfilePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-6 mb-6">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-slate-800 border-2 border-slate-700">
-                <User className="h-10 w-10 text-slate-400" />
+            <div className="flex items-center gap-6 mb-6 bg-slate-950/30 p-4 rounded-xl border border-slate-800">
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-slate-800 border-2 border-slate-700 overflow-hidden shrink-0 shadow-lg">
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+                ) : (
+                  <User className="h-10 w-10 text-slate-400" />
+                )}
               </div>
-              <Button variant="outline" className="border-slate-700 text-white bg-slate-800 hover:bg-slate-700" type="button">
-                Cambiar Foto
-              </Button>
+              <div className="space-y-2">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  ref={profileImageRef}
+                  onChange={(e) => handleImageUpload(e, setProfileImage)}
+                />
+                <Button 
+                  variant="outline" 
+                  className="border-slate-700 text-white bg-slate-800 hover:bg-slate-700 block" 
+                  type="button"
+                  onClick={() => profileImageRef.current?.click()}
+                >
+                  Cambiar Foto
+                </Button>
+                <p className="text-xs text-slate-500">Formato cuadrado 1:1 recomendado. Máximo 5MB.</p>
+              </div>
             </div>
 
             {/* Rol Específico: Inversor */}
@@ -106,15 +139,34 @@ export default function ProfilePage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-6 mb-6">
-              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-slate-800 border-2 border-slate-700 overflow-hidden">
-                <ImageIcon className="h-8 w-8 text-slate-400" />
+            <div className="flex items-center gap-6 mb-6 bg-slate-950/30 p-4 rounded-xl border border-slate-800">
+              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-white border-2 border-slate-700 overflow-hidden shrink-0 shadow-lg">
+                {companyLogo ? (
+                  <img src={companyLogo} alt="Company Logo" className="h-full w-full object-contain" />
+                ) : (
+                  <div className="h-full w-full bg-slate-800 flex items-center justify-center">
+                    <ImageIcon className="h-8 w-8 text-slate-400" />
+                  </div>
+                )}
               </div>
               <div className="space-y-2">
-                <Label className="text-white">Logo de la Empresa</Label>
-                <Button variant="outline" className="border-slate-700 text-white bg-slate-800 hover:bg-slate-700 block" type="button">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  ref={companyLogoRef}
+                  onChange={(e) => handleImageUpload(e, setCompanyLogo)}
+                />
+                <Label className="text-white block">Logo de la Empresa</Label>
+                <Button 
+                  variant="outline" 
+                  className="border-slate-700 text-white bg-slate-800 hover:bg-slate-700 block mt-1" 
+                  type="button"
+                  onClick={() => companyLogoRef.current?.click()}
+                >
                   Subir Logo
                 </Button>
+                <p className="text-xs text-slate-500">Soporta PNG con fondo transparente.</p>
               </div>
             </div>
 
