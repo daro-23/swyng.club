@@ -294,7 +294,12 @@ export default function ProfilePage() {
                   <SelectContent className="bg-slate-900 border-slate-800 text-white">
                     <SelectItem value="padel">Pádel</SelectItem>
                     <SelectItem value="golf">Golf</SelectItem>
-                    <SelectItem value="barre">Barre</SelectItem>
+                    <SelectItem value="running">Running / Carrera</SelectItem>
+                    <SelectItem value="ciclismo">Ciclismo / Ruta</SelectItem>
+                    <SelectItem value="tenis">Tenis</SelectItem>
+                    <SelectItem value="escalada">Escalada / Bouldering</SelectItem>
+                    <SelectItem value="barre">Barre / Pilates</SelectItem>
+                    <SelectItem value="crossfit">CrossFit / Funcional</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
